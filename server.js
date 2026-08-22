@@ -8,31 +8,32 @@ app.use(express.urlencoded({ extended: true }));
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-// Ruta de prueba
 app.get('/', (req, res) => {
     res.send('Servidor activo');
 });
 
-// Endpoint flexible para capturar Webhooks
+// Responde a cualquier petición en /webhook (GET, POST, PUT)
 app.all('/webhook', async (req, res) => {
-    console.log('--- ¡RUHAVIK SE CONECTÓ! ---');
-    console.log('Metodo:', req.method);
-    console.log('Body:', JSON.stringify(req.body, null, 2));
+    // 1. Responder de inmediato a Ruhavik para que no de Timeout
+    res.status(200).send('OK');
 
+    console.log('--- NOTIFICACIÓN RECIBIDA DE RUHAVIK ---');
+    console.log(JSON.stringify(req.body, null, 2));
+
+    // 2. Enviar mensaje a Telegram
     if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
         try {
+            const mensaje = `🚨 *NOTIFICACIÓN DE RUHAVIK*\n\nSe ha detectado un evento en tu vehículo.`;
             await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                 chat_id: TELEGRAM_CHAT_ID,
-                text: '🚨 *¡ALERTA DETECTADA EN LA MOTO!*',
+                text: mensaje,
                 parse_mode: 'Markdown'
             });
-            console.log('Notificación enviada a Telegram');
+            console.log('Alerta enviada con éxito a Telegram');
         } catch (err) {
-            console.log('Error enviando a Telegram:', err.message);
+            console.error('Error al enviar a Telegram:', err.message);
         }
     }
-    
-    res.status(200).send('OK');
 });
 
 const PORT = process.env.PORT || 3000;
