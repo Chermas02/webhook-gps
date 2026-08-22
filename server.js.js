@@ -4,8 +4,8 @@ const app = express();
 app.use(express.json());
 
 // === TUS CREDENCIALES DE TELEGRAM ===
-const TELEGRAM_TOKEN = 'AQUÍ_PEGA_TU_TOKEN_DE_BOTFATHER';
-const TELEGRAM_CHAT_ID = 'AQUÍ_PEGA_TU_ID_DE_USERINFOBOT';
+const TELEGRAM_TOKEN = '8566617139:AAGwLrmdZdb6lAti11vlJboc6ZOekITXpaY';
+const TELEGRAM_CHAT_ID = '8723905303';
 
 async function enviarTelegram(texto) {
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
