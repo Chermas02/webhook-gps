@@ -1,7 +1,7 @@
 {
   "name": "webhook-gps",
   "version": "1.0.0",
-  "description": "Webhook para Ruhavik y Telegram",
+  "description": "Alertas de GPS a Telegram",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
